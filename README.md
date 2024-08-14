@@ -19,7 +19,7 @@ Lors de l'implémentation, il sera difficile, voir même impossible, de dire com
 
 L'implémentation sera donc que la classe animal va gérer le nom et la couleur comme attribut comme cela se passe dans le cas de l'héritage classique et il aura une méthode abstraite `crie()` qui sera ensuite définie dans les sous-classes.
 
-``` Mermaid
+```mermaid
 classDiagram
     Animal <|-- Chien
     Animal <|-- Oiseau
@@ -46,7 +46,7 @@ classDiagram
 > Les méthodes abstaites sont représentées en *italique* dans un digramme UML. 
 
 Et l'implémentation de cela en java serai la suivante:
-``` Java
+```java
 public abstract class Animal
 {
     private String nom;
@@ -112,13 +112,13 @@ public class Application{
 ***Rappel:***
 
 **extends**: Défini de quelle classe elle va hériter.
-```Java
+```java
 public class Chien extends Animal
 ```
 La classe Chien hérite de la classe Animal.
 
 **super()**: Appelle le constructeur de la classe parent.
-```Java
+```java
     public Chien(String nom, String couleur)
     {
         super(nom, couleur);
@@ -127,7 +127,7 @@ La classe Chien hérite de la classe Animal.
 Appelle le constructeur de la classe `Animal` avec les paramètres reçus dans le constructeur `Chien`
 
 **this**: Fait référence à l'attribut de la classe.
-```Java
+```java
     private String nom;
     private String couleur;
 
@@ -141,7 +141,7 @@ this.nom fait référence à l'attribut `private String nom;`
 et `nom` fait référence au paramètre du constructeur.
 
 **instanceOf**: Permet de savoir si l'objet est une instance d'une classe spécifiée.
-```Java
+```java
     for(Animal animal : animaux)
     {
         if(animal instanceOf Chien)
@@ -162,7 +162,7 @@ En vous basant sur les différents diagrammes en dessous, faites les modificatio
 - Elle prévoit deux méthodes abstraites calculeSurface() et nombreDeCotes() devant être implémentées par ses descendants.
  - Elle introduit une nouvelle méthode getInfos() servant à produire un texte donnant toutes les infos utiles sur un objet de type forme, qui sera utilisé par le main() pour afficher les formes.
 
-``` Mermaid
+```mermaid
 classDiagram
     Forme <|-- Triangle
     Forme <|-- Disque
@@ -218,7 +218,7 @@ classDiagram
 Créez ensuite une classe `Application` possédant une méthode `main` respectant les diagrammes de séquences suivants:
 
 ### Méthode main(String[] args)
-```Mermaid
+```mermaid
 sequenceDiagram
     create participant Application
     main->>Application: <<Creation>>
@@ -230,7 +230,7 @@ sequenceDiagram
 
 ### Méthode calculerSurfaces()
 
-```Mermaid
+```mermaid
 sequenceDiagram
     create participant laSurfaceTotale
     Application->>+laSurfaceTotale: 0.0
@@ -254,7 +254,7 @@ sequenceDiagram
 
 ### Méthode genererFormes()
 
-```Mermaid
+```mermaid
 sequenceDiagram
     create participant carre1
     Application->>carre1: cote = 1
