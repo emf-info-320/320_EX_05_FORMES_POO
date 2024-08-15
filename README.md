@@ -3,21 +3,39 @@
 ## Durée : 30'
 
 ## Objectifs
-Réactivation des fondamentaux Java : classes et objets.
+- Réactivation des fondamentaux Java : classes et objets.
+- Mise en pratique de l'héritage.
+- Découverte et mise en pratique des méthodes et classes abstraites.
 
 ## Les classes et méthodes abstraites
 
-En Java, une classe abstraite est une classe qui ne peut pas être instanciée directement (Il n'est pas possible de faire un objet à partir de cette classe). Elle sert de modèle pour d'autres classes et peut contenir des méthodes abstraites et des méthodes concrètes. Une méthode abstraite est une méthode déclarée sans implémentation ; elle n'a pas de corps et il sera ensuite obligatoire de l'implémenter par les sous-classes qui héritent de la classe abstraite.
+Une méthode abstraite est une méthode déclarée mais sans son implémentation, sans son code. Par exemple :
+```java
+public abstract double faudraImplementerCaPlusTardHein(double a, double b);
+```
+Une classe abstraite, est une classe dans laquelle il y a au moins une méthode abstraite et/ou qui a été marqué ainsi. Par exemple :
+```java
+public abstract class MotherOfFutureImplementation {
+    public abstract double faudraImplementerCaPlusTardHein(double a, double b);
+}
+```
 
-Les classes abstraites sont utilisées lorsqu'on veut définir un comportement commun pour plusieurs classes sans fournir une implémentation complète. Elles permettent de s'assurer que certaines méthodes seront présentes dans toutes les sous-classes, mais elles laissent la liberté à ces sous-classes de définir comment ces méthodes doivent se comporter.
+Pour que Java comprenne la situation et accepte cette absence d'implémentation, il faudra utiliser le mot-clé `abstract`. La méthode ne sera donc plus concrète mais abstraite car le code de son implémentation n'est pas disponible/fourni. Et comme toute méthode se trouve forcément dans une classe, puisqu'au moins une des méthodes de cette classe sera abstraite, la classe le deviendra elle aussi. Elle nécessitera dès lors également l'utilisation du mot-clé `abstract` pour que Java comprenne la situation et l'accepte.
 
-**Prennons un exemple:**
+    Une classe abstraite ne peut pas être instanciée directement car il lui manque encore des choses (abstraite).
+    Il ne sera pas possible de faire un objet à partir de cette classe (car pas concrète).
 
-Nous voulons faire une application qui gère des animaux. Nous allons donc faire une classe qui s'appelle `Animal` qui contiendra un nom, une couleur et doit s'exprimer.
+Par contre cela est **très utile**, car cette classe abstraite pourra **servir de modèle** à d'autres classes qui en hériterons et qui fourniront ce code manquant afin de devenir des classes concrètes, et donc instanciables afin d'en produire des objets.
 
-Lors de l'implémentation, il sera difficile, voir même impossible, de dire combien de pattes un animal a par défaut. Ce qui est sûr par contre c'est que chaque sous-classe **doit** fournir cette information.
+Les classes abstraites sont **utilisées lorsqu'on veut définir un comportement commun** a plusieurs classes sans avoir à fournir d'implémentation pour ce que l'on ne sait pas faire. Elles permettent de s'assurer que certaines méthodes seront présentes dans toutes les sous-classes, en laissant la liberté à ces sous-classes de définir comment ces méthodes abstraites devront se comporter.
 
-L'implémentation sera donc que la classe animal va gérer le nom et la couleur comme attribut comme cela se passe dans le cas de l'héritage classique et il aura une méthode abstraite `crie()` qui sera ensuite définie dans les sous-classes.
+**Prenons un exemple:**
+
+Nous voulons faire une application qui gère des animaux. Nous allons donc faire une classe qui s'appelle `Animal` avec les caractéristiques nom et couleur et qui devra savoir s'exprimer.
+
+Lors de l'implémentation, il sera difficile, voir même impossible, de dire combien de pattes un animal possède, d'autant qu'il n'y a pas de valeur par défaut. Ce qui est sûr par contre, c'est que chaque animal, donc sous-classe, **devra** fournir cette information.
+
+L'implémentation sera donc que la classe animal prévoira de complètement gérer le nom et la couleur de l'animal comme attribut, en fournissant directement tout le code nécessaire, mais prévoira la présence d'un savoir-faire abstrait, une méthode abstraite `crie()`, qui sera ensuite définie dans les futures sous-classes.
 
 ```mermaid
 classDiagram
@@ -27,15 +45,20 @@ classDiagram
     class Animal{
         - nom : String
         - couleur : String
+        + Animal(String nom, String couleur)
+        + getNom() String
+        + getCouleur() String
         + crie() String*
     }
     <<abstract>> Animal
 
     class Chien{
+        + Chien(String nom, String couleur)
         + crie() String
     }
 
     class Oiseau{
+        + Oiseau(String nom, String couleur)
         + crie() String
     }
 
@@ -43,9 +66,9 @@ classDiagram
         + main(String[] args)
     }
 ```
-> Les méthodes abstaites sont représentées en *italique* dans un digramme UML. 
+> Les méthodes abstaites sont représentées en *italique* dans un diagramme UML. 
 
-Et l'implémentation de cela en java serai la suivante:
+Et l'implémentation de cela en `Java` serait la suivante :
 ```java
 public abstract class Animal
 {
@@ -56,6 +79,16 @@ public abstract class Animal
     {
         this.nom = nom;
         this.couleur = couleur;
+    }
+
+    public String getNom()
+    {
+        return nom;
+    }
+
+    public String getCouleur()
+    {
+        return couleur;
     }
 
     public abstract String crie();
@@ -71,7 +104,7 @@ public class Chien extends Animal
     @Override
     public String crie()
     {
-        return "Ouaf, ouaf";
+        return getNom() + " fait Ouaf, ouaf";
     }
 }
 
@@ -85,7 +118,7 @@ public class Oiseau extends Animal
     @Override
     public Override String crie()
     {
-        return "Piou, piou";
+        return getNom() + " fait Piou, piou";
     }
 }
 
@@ -100,9 +133,10 @@ public class Application{
 
         for(Animal animal : animaux)
         {
+            System.out.println(animal.crie());
             if(animal instanceOf Chien)
             {
-                System.out.println("Ceci est un chien");
+                System.out.println("Il s'agit d'un chien !!!");
             }
         }
     }
@@ -111,22 +145,22 @@ public class Application{
 
 ***Rappel:***
 
-**extends**: Défini de quelle classe elle va hériter.
+**extends**: Définit de quelle classe on va hériter.
 ```java
 public class Chien extends Animal
 ```
 La classe Chien hérite de la classe Animal.
 
-**super()**: Appelle le constructeur de la classe parent.
+**super()**: Appelle le constructeur de la classe parent, peu importe son nom.
 ```java
     public Chien(String nom, String couleur)
     {
         super(nom, couleur);
     }
 ```
-Appelle le constructeur de la classe `Animal` avec les paramètres reçus dans le constructeur `Chien`
+Appelle le constructeur de la classe `Animal` avec les paramètres reçus dans le constructeur `Chien`.
 
-**this**: Fait référence à l'attribut de la classe.
+**this**: Fait référence à l'objet en cours.
 ```java
     private String nom;
     private String couleur;
@@ -137,30 +171,28 @@ Appelle le constructeur de la classe `Animal` avec les paramètres reçus dans l
         this.couleur = couleur;
     }
 ```
-this.nom fait référence à l'attribut `private String nom;`
-et `nom` fait référence au paramètre du constructeur.
+`this.nom` fait référence à l'attribut `private String nom;` de l'objet en cours `this`, alors que `nom` fait référence au paramètre nom passé au constructeur.
 
-**instanceOf**: Permet de savoir si l'objet est une instance d'une classe spécifiée.
+**instanceOf**: Permet de savoir si l'objet est bien une instance d'une classe spécifiée.
 ```java
     for(Animal animal : animaux)
     {
         if(animal instanceOf Chien)
         {
-            System.out.println("Ceci est un chien");
+            System.out.println("Ceci est bien un chien");
         }
     }
 ```
-En parcourant les objets présent dans la liste `animaux`, nous vérifions si l'objet courant est une instance de la classe `Chien`. Retourne `true` si c'est bien une instance de la classe `Chien`, sinon retourne `false`.
+En parcourant les objets présents dans la liste `animaux`, nous vérifions si l'objet courant est bien une instance de la classe `Chien`. Retourne `true` si c'est bien une instance de la classe `Chien`, sinon retourne `false`.
 
 ## Travail à réaliser
 
-Copiez le projet `Les Formes` fait précédement.
+Recopiez vos classes (modèles) du projet précédent `320_EX_04_FORMES_BASE` fait précédement.
 
-En vous basant sur les différents diagrammes en dessous, faites les modifications suivantes:
-
+En vous basant sur les différents diagrammes ci-dessous, apportez les modifications suivantes :
 - La classe Forme devient une classe abstraite. 
 - Elle prévoit deux méthodes abstraites calculeSurface() et nombreDeCotes() devant être implémentées par ses descendants.
- - Elle introduit une nouvelle méthode getInfos() servant à produire un texte donnant toutes les infos utiles sur un objet de type forme, qui sera utilisé par le main() pour afficher les formes.
+- Elle introduit une nouvelle méthode getInfos() servant à produire un texte donnant toutes les informations utiles sur un objet de type Forme, qui sera utilisée par le main() pour afficher les formes.
 
 ```mermaid
 classDiagram
@@ -173,13 +205,13 @@ classDiagram
         + MAX_FORME : int = 8
         + Application()
         + genererFormes() void
-        + claculerSurfaces() void
+        + calculerSurfaces() void
         + main(String[] args)$ void
     }
     class Forme{
         - nom : String
         + Forme(String nom) 
-        + calculSurface() double*
+        + calculeSurface() double*
         + nombreDeCotes() String*
         + getInfos() String
         + getNom() String
@@ -189,21 +221,21 @@ classDiagram
         - base : int
         - hauteur : int
         + Triangle(String nom, int base, int hauteur)
-        + calculSurface() double
+        + calculeSurface() double
         + nombreDeCotes() String
     }
 
     class Disque{
         - rayon : int
         + Disque(String nom, int rayon)
-        + calculSurface() double
+        + calculeSurface() double
         + nombreDeCotes() String
     }
 
     class Carre{
         - cote : int
         + Carre(String nom, int cote)
-        + calculSurface() double
+        + calculeSurface() double
         + nombreDeCotes() String
     }
 
@@ -211,11 +243,11 @@ classDiagram
         - largeur : int
         - longueur : int
         + Rectangle(String nom, int largeur, int longueur)
-        + calculSurface() double
+        + calculeSurface() double
         + nombreDeCotes() String
     }
 ```
-Créez ensuite une classe `Application` possédant une méthode `main` respectant les diagrammes de séquences suivants:
+Créez ensuite une classe `Application` possédant une méthode `main` respectant les diagrammes de séquences suivants :
 
 ### Méthode main(String[] args)
 ```mermaid
@@ -231,26 +263,30 @@ sequenceDiagram
 ### Méthode calculerSurfaces()
 
 ```mermaid
+
 sequenceDiagram
-    create participant laSurfaceTotale
-    Application->>+laSurfaceTotale: 0.0
-    create participant laSurface
-    Application->>+laSurface: 0.0
+    create participant double laSurfaceTotale
+    calculerSurfaces()->>+ double laSurfaceTotale: 0.0
     alt lesFormes != null
         loop i < lesFormes.length
-            Application ->>+ Application: uneForme = lesFormes[i]
+            calculerSurfaces() ->>+ calculerSurfaces(): uneForme = lesFormes[i]
             alt uneForme != null
-                Application ->>+ uneForme: calculeSurface()
-                uneForme -->>- Application: 
-                Application ->>+ uneForme: getInfos()
-                uneForme -->>- Application: 
-                Application ->>+ Application: SOUT(le retour de getInfos)
+                calculerSurfaces() ->>+ uneForme: calculeSurface()
+                uneForme -->>- calculerSurfaces():  double laSurface
+
+                calculerSurfaces() ->>+ calculerSurfaces(): laSurfaceTotale += laSurface
+
+                calculerSurfaces() ->>+ uneForme: getInfos()
+                uneForme -->>- calculerSurfaces(): String lesInfos
+                calculerSurfaces() ->>+ calculerSurfaces(): SOUT(lesInfos)
             end
         end
     end
 
-    Application ->>+ Application: SOUT(laSurfaceTotale)
+    calculerSurfaces() ->>+ calculerSurfaces(): SOUT(laSurfaceTotale)
+
 ```
+
 
 ### Méthode genererFormes()
 
