@@ -185,6 +185,24 @@ Appelle le constructeur de la classe `Animal` avec les paramètres reçus dans l
 ```
 En parcourant les objets présents dans la liste `animaux`, nous vérifions si l'objet courant est bien une instance de la classe `Chien`. Retourne `true` si c'est bien une instance de la classe `Chien`, sinon retourne `false`.
 
+**Acceder aux méthodes du type de l'enfant**: Lorsque l'on parcours la liste animal, la réference est de type Animal, c'est à dire que seul les méthodes définies dans le type Animal seront disponbiles. 
+Dans certain cas particulier, on peut vouloir appeler des méthodes des classes enfants (Chien et Oiseau). 
+POur cela il sera nécessaire de *caster* le type parent en type enfant.
+
+```java
+    for(Animal animal : animaux)
+    {
+        if(animal instanceOf Chien)
+        {
+            //l'instruction (Chien) transforme l'objet animal en   
+            //objet chien, pour autant que l'instantce de animal soit de type Chien (contrôle ci-dessus)
+            Chien monChien = (Chien) animal;
+            //je pourrais ensuite appeler les méthodes qui seraient définies uniquement dans Chien
+            //monChien.maMethodeDeChien();
+        }
+    }
+```
+
 ## Travail à réaliser
 
 Recopiez vos classes (modèles) du projet précédent `320_EX_04_FORMES_BASE` fait précédement.
