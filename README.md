@@ -270,6 +270,7 @@ Créez ensuite une classe `Application` possédant une méthode `main` respectan
 ### Méthode main(String[] args)
 ```mermaid
 sequenceDiagram
+    participant main as main()
     create participant Application
     main->>Application: <<Creation>>
     main->>+Application: genererFormes()
@@ -281,27 +282,28 @@ sequenceDiagram
 ### Méthode calculerSurfaces()
 
 ```mermaid
-
 sequenceDiagram
-    create participant double laSurfaceTotale
-    calculerSurfaces()->>+ double laSurfaceTotale: 0.0
+    participant calculerSurfaces as calculerSurfaces()
+    calculerSurfaces->>+ calculerSurfaces: double laSurfaceTotale = 0.0
     alt lesFormes != null
         loop i < lesFormes.length
-            calculerSurfaces() ->>+ calculerSurfaces(): uneForme = lesFormes[i]
+            create participant uneForme
+            
+            calculerSurfaces ->>+ uneForme: uneForme = lesFormes[i]
             alt uneForme != null
-                calculerSurfaces() ->>+ uneForme: calculeSurface()
-                uneForme -->>- calculerSurfaces():  double laSurface
+                calculerSurfaces ->>+ uneForme: calculeSurface()
+                uneForme -->>- calculerSurfaces:  double laSurface =
 
-                calculerSurfaces() ->>+ calculerSurfaces(): laSurfaceTotale += laSurface
+                calculerSurfaces ->>+ calculerSurfaces: laSurfaceTotale += laSurface
 
-                calculerSurfaces() ->>+ uneForme: getInfos()
-                uneForme -->>- calculerSurfaces(): String lesInfos
-                calculerSurfaces() ->>+ calculerSurfaces(): SOUT(lesInfos)
+                calculerSurfaces ->>+ uneForme: getInfos()
+                uneForme -->>- calculerSurfaces: String lesInfos =
+                calculerSurfaces ->>+ calculerSurfaces: SOUT(lesInfos)
             end
         end
     end
 
-    calculerSurfaces() ->>+ calculerSurfaces(): SOUT(laSurfaceTotale)
+    calculerSurfaces ->>+ calculerSurfaces: SOUT(laSurfaceTotale)
 
 ```
 
@@ -310,6 +312,7 @@ sequenceDiagram
 
 ```mermaid
 sequenceDiagram
+    participant Application
     create participant carre1
     Application->>carre1: cote = 1
     create participant rectangle1
